@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hostel Room Allotment</title>
+    <link rel="shortcut icon" href="src/hostel.png" type="image/x-icon" />
+    <link rel="stylesheet" href="CSS/Atten.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>LAKH Hostel | Admin Home</h1>
+
+      <form id="allotmentForm">
+        <div class="form-group">
+          <label for="date">Allotment Date:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+
+        <div class="form-group">
+          <label for="name">Student Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter student name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="rollNo">Roll Number:</label>
+          <input
+            type="text"
+            id="rollNo"
+            name="rollNo"
+            placeholder="Enter roll number"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="roomNo">Room Number:</label>
+          <input
+            type="text"
+            id="roomNo"
+            name="roomNo"
+            placeholder="Enter room number"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="status">Room Status:</label>
+          <select id="status" name="status" required>
+            <option value="Allotted">Allotted</option>
+            <option value="Vacated">Vacated</option>
+          </select>
+        </div>
+
+        <button type="submit">Add Entry</button>
+      </form>
+
+      <div class="table-container">
+        <table id="allotmentTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Roll No</th>
+              <th>Room No</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+  <script>
+    // Wait for the HTML document to be fully loaded before running the script
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.querySelector("#allotmentForm");
+      const tableBody = document.querySelector("#allotmentTable tbody");
+      const STORAGE_KEY = "lakhHostelAllotments";
+
+      function loadEntries() {
+        try {
+          return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveEntries(entries) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      }
+
+      function renderRow(entry, index) {
+        const newRow = tableBody.insertRow();
+        newRow.insertCell(0).textContent = entry.date;
+        newRow.insertCell(1).textContent = entry.name;
+        newRow.insertCell(2).textContent = entry.rollNo;
+        newRow.insertCell(3).textContent = entry.roomNo;
+        newRow.insertCell(4).textContent = entry.status;
+
+        const actionCell = newRow.insertCell(5);
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.textContent = "Remove";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.addEventListener("click", function () {
+          const entries = loadEntries();
+          entries.splice(index, 1);
+          saveEntries(entries);
+          renderAll();
+        });
+        actionCell.appendChild(deleteBtn);
+      }
+
+      function renderAll() {
+        tableBody.innerHTML = "";
+        loadEntries().forEach(renderRow);
+      }
+
+      // Restore previously saved entries on page load
+      renderAll();
+
+      form.addEventListener("submit", function (event) {
+        // Prevent the default form submission behavior (which refreshes the page)
+        event.preventDefault();
+
+        const entry = {
+          date: document.querySelector("#date").value,
+          name: document.querySelector("#name").value,
+          rollNo: document.querySelector("#rollNo").value,
+          roomNo: document.querySelector("#roomNo").value,
+          status: document.querySelector("#status").value,
+        };
+
+        const entries = loadEntries();
+        entries.push(entry);
+        saveEntries(entries);
+        renderAll();
+
+        form.reset();
+      });
+    });
+  </script>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="CSS/login.css" />
+    <link rel="shortcut icon" href="src/hostel.png" type="image/x-icon" />
+    <script
+      src="https://kit.fontawesome.com/97ebdf5864.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <h2>LAKH Hostel | Login</h2>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <input type="email" id="email" required />
+          <label for="email">Email</label>
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+
+        <div class="form-group">
+          <input type="password" id="password" required />
+          <label for="password">Password</label>
+          <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <p>
+          <input type="checkbox" id="remember" />
+          <label for="remember" class="inline-label">Remember Me</label>
+          <a href="#">Forget Password</a>
+        </p>
+
+        <input id="btn" type="submit" value="Login" />
+
+        <p id="loginNote" class="note" hidden>
+          This is a front-end demo — there's no login backend connected yet.
+        </p>
+
+        <p>Don't have an account? <a href="#">Register</a></p>
+      </form>
+    </div>
+
+    <script>
+      // Demo-only: the form previously submitted with the default GET
+      // method, which would have put the email and password straight into
+      // the URL / browser history. There's no backend to send this to yet,
+      // so we just stop the reload and let the visitor know.
+      document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        document.getElementById("loginNote").hidden = false;
+      });
+    </script>
+  </body>
+</html>
